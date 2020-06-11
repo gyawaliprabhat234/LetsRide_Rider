@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            android:background="@color/uberPrimary"
+		>
+
+            <Refractored.Controls.CircleImageView
+                android:id="@+id/circleImageView1"
+                android:layout_height="140dp"
+                android:layout_width="120dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/centerimage"
+                android:scaleType="centerCrop"
+		/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:text="RIDER REGISTRATION"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/circleImageView1"
+                android:textColor="@color/uberwhite"
+		/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_weight="0.6"
+            android:padding="10dp"
+		>
+            
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/otpcodeText"
+             
+                
+			>
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:hint="Enter OTP Here"
+                    android:inputType="phone"
+                    
+		
+			/>
+            </android.support.design.widget.TextInputLayout>
+            <TextView
+                android:id="@+id/resendHelperText"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:text="Please wait 30 seconds to resend code"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/otpcodeText"
+                android:textColor="@color/quantum_grey"
+		/>
+            <Button
+                android:id="@+id/resendText"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:text="Please click here to resend code"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="20sp"
+                android:layout_below="@+id/otpcodeText"
+                android:textColor="@color/quantum_white_text"
+                android:background="@android:color/holo_blue_bright"
+		/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+
+                <Button
+                    android:id="@+id/checkOtpButton"
+                    android:layout_height="45dp"
+                    android:layout_width="300dp"
+                    android:text="Finish"
+                    android:textColor="@color/uberwhite"
+                    android:background="@drawable/uberroundbutton"
+                    android:layout_centerInParent="true"
+			/>
+
+
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>
