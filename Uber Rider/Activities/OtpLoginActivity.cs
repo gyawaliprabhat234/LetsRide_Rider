@@ -103,60 +103,67 @@ namespace Uber_Rider.Activities
         }
         private async void RegisterButton_Click(object sender, EventArgs e)
         {
-            if (!CheckPermission())
+            try
             {
-                Snackbar.Make(rootView, "Please allow the permissions", Snackbar.LengthShort).Show();
-                return;
-            }
-            if(Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.Internet)
-            {
-                Snackbar.Make(rootView, "Internet connection is required", Snackbar.LengthShort).Show();
-                return;
-            }
-
-            SetCustomerInfo();
-            if (customerInfo.CustomerMobileNumber.ToString().Length != 10)
-            {
-                Snackbar.Make(rootView, "Please provide a valid Phone Number", Snackbar.LengthShort).Show();
-                return;
-            }
-            if(customerInfo.CustomerName.Length < 6)
-            {
-                Snackbar.Make(rootView, "Please provide a valid name", Snackbar.LengthShort).Show();
-                return;
-            }
-            if(customerInfo.CustomerEmail.Length != 0)
-            {
-                if (!DataModels.Common.EmailIsValid(customerInfo.CustomerEmail))
+                if (!CheckPermission())
                 {
-                    Snackbar.Make(rootView, "Please provide a valid Email Address", Snackbar.LengthShort).Show();
+                    Snackbar.Make(rootView, "Please allow the permissions", Snackbar.LengthShort).Show();
                     return;
                 }
-            }
-            ShowProgressDialogue();
-            ResponseData response = await new RegistrationService().RegisterCustomer(customerInfo);
-            if (response.IsSuccess)
-            {
-                CloseProgressDialogue();
-                CustomerInfo userInfo = JsonConvert.DeserializeObject<CustomerInfo>(response.RecordsInString);
-                if (Guid.TryParse(userInfo.CustomerIdString, out Guid result))
-                    userInfo.CustomerId = result;
-                else
+                if (Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.Internet)
                 {
-                    Snackbar.Make(rootView, "Operation Failed in conversion", Snackbar.LengthShort).Show();
+                    Snackbar.Make(rootView, "Internet connection is required", Snackbar.LengthShort).Show();
                     return;
                 }
-                if (response.IsValid)
-                    Login_Successful(userInfo, response.Token);
-                else
-                 Customer_CodeSent(userInfo);
-            }
-            else
-            {
-                CloseProgressDialogue();
-                Snackbar.Make(rootView, "Operation Failed " + response.Message, Snackbar.LengthShort).Show();
 
+                SetCustomerInfo();
+                if (customerInfo.CustomerMobileNumber.ToString().Length != 10)
+                {
+                    Snackbar.Make(rootView, "Please provide a valid Phone Number", Snackbar.LengthShort).Show();
+                    return;
+                }
+                if (customerInfo.CustomerName.Length < 6)
+                {
+                    Snackbar.Make(rootView, "Please provide a valid name", Snackbar.LengthShort).Show();
+                    return;
+                }
+                if (customerInfo.CustomerEmail.Length != 0)
+                {
+                    if (!DataModels.Common.EmailIsValid(customerInfo.CustomerEmail))
+                    {
+                        Snackbar.Make(rootView, "Please provide a valid Email Address", Snackbar.LengthShort).Show();
+                        return;
+                    }
+                }
+                ShowProgressDialogue();
+                ResponseData response = await new RegistrationService().RegisterCustomer(customerInfo);
+                if (response.IsSuccess)
+                {
+                    CloseProgressDialogue();
+                    CustomerInfo userInfo = JsonConvert.DeserializeObject<CustomerInfo>(response.RecordsInString);
+                    if (Guid.TryParse(userInfo.CustomerIdString, out Guid result))
+                        userInfo.CustomerId = result;
+                    else
+                    {
+                        Snackbar.Make(rootView, "Operation Failed in conversion", Snackbar.LengthShort).Show();
+                        return;
+                    }
+                    if (response.IsValid)
+                        Login_Successful(userInfo, response.Token);
+                    else
+                        Customer_CodeSent(userInfo);
+                }
+                else
+                {
+                    CloseProgressDialogue();
+                    Snackbar.Make(rootView, "Operation Failed " + response.Message, Snackbar.LengthShort).Show();
+
+                }
+            }catch(Exception ex)
+            {
+                throw;
             }
+
         }
 
         public  void SaveCustomerInfoToDatabase()
@@ -172,7 +179,7 @@ namespace Uber_Rider.Activities
             mTelephonyMgr = (Android.Telephony.TelephonyManager)GetSystemService(TelephonyService);
             CustomerDeviceInfo deviceInfo = new CustomerDeviceInfo()
             {
-                DeviceSetPhoneNumber = Convert.ToDecimal(mTelephonyMgr.Line1Number),
+                DeviceSetPhoneNumber = Decimal.TryParse(mTelephonyMgr.Line1Number, out decimal num) ? num : 0 ,
                 DeviceNumber = mTelephonyMgr.DeviceId, 
                 DeviceModel = Xamarin.Essentials.DeviceInfo.Model,
                 DeviceName = Xamarin.Essentials.DeviceInfo.Name,

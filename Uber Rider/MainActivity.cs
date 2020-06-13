@@ -627,7 +627,7 @@ namespace Uber_Rider
                    });
                 if (!IsConnected)
                     await ConnectAsync();
-                await hubConnection.InvokeAsync("CancelRequest");
+                await hubConnection.InvokeAsync("CancelRequest" , "timeout");
             }
             catch (Exception ex)
             {
@@ -678,7 +678,7 @@ namespace Uber_Rider
 
                 if (!IsConnected)
                     await ConnectAsync();
-                await hubConnection.InvokeAsync("CancelRequest");
+                await hubConnection.InvokeAsync("CancelRequest", "cancel");
 
             }
             catch (Exception ex)
